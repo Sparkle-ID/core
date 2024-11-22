@@ -1,0 +1,17 @@
+{
+  "name": "@sparkle/contracts",
+  "version": "1.0.0",
+  "description": "Sparkle ID contracts",
+  "private": true,
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test:unit": "forge test",
+    "test:coverage": "forge coverage",
+    "build": "forge build"
+  },
+  "author": "sparkle ID",
+  "license": "ISC"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@sparkle/monorepo",
+  "version": "1.0.0",
+  "description": "sparkle ID",
+  "private": true,
+  "workspaces": [
+    "packages/contracts"
+  ],
+  "scripts": {
+    "test:all": "yarn workspace @sparkle/contracts run test:unit",
+    "coverage": "yarn workspace @sparkle/contracts run test:coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sparkle-ID/core.git"
+  },
+  "author": "Sparkle ID",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sparkle-ID/core/issues"
+  },
+  "homepage": "https://github.com/Sparkle-ID/core#readme"
+}
