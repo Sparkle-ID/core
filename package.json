@@ -4,11 +4,15 @@
   "description": "sparkle ID",
   "private": true,
   "workspaces": [
-    "packages/contracts"
+    "packages/contracts",
+    "packages/config"
   ],
   "scripts": {
     "test:all": "yarn workspace @sparkle/contracts run test:unit",
     "coverage": "yarn workspace @sparkle/contracts run test:coverage"
+  },
+  "engines": {
+    "node": ">=20.10.0"
   },
   "repository": {
     "type": "git",

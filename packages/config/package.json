@@ -1,0 +1,17 @@
+{
+  "name": "@sparkle/config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "generate-evm-accounts.js",
+  "scripts": {
+    "generate": "node ./generate-evm-accounts.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ethersproject/hdnode": "^5.7.0",
+    "@hashgraph/sdk": "^2.53.0",
+    "dotenv": "^16.4.5"
+  }
+}

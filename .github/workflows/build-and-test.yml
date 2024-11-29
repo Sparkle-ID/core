@@ -31,7 +31,7 @@ jobs:
           version: nightly-5be158ba6dc7c798a6f032026fe60fc01686b33b
 
       - name: Yarn Install
-        run: yarn install --mode=skip-build && yarn allow-scripts
+        run: yarn install --mode=skip-build
         
       - name: Setup Forge
         run: yarn workspace @sparkle/contracts forge:install
