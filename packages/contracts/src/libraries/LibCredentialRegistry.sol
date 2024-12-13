@@ -12,6 +12,16 @@ library LibCredentialRegistry {
         ~bytes32(uint256(0xff));
 
     // Events
+    /**
+     * @notice Emitted when a credential is successfully issued.
+     * @param credentialId Unique ID of the issued credential.
+     * @param issuerDID DID of the issuing entity.
+     * @param holderDID DID of the credential holder.
+     * @param credentialType Type of the credential (e.g., "MedicalRecord").
+     * @param metadataURI URI pointing to credential metadata.
+     * @param issuedAt Timestamp when the credential was issued.
+     * @param expiresAt Expiration timestamp of the credential.
+     */
     event CredentialIssued(
         uint256 indexed credentialId,
         string indexed issuerDID,
@@ -21,6 +31,11 @@ library LibCredentialRegistry {
         uint256 issuedAt,
         uint256 expiresAt
     );
+    /**
+     * @notice Emitted when a credential is revoked.
+     * @param credentialId Unique ID of the revoked credential.
+     * @param revokedAt Timestamp when the credential was revoked.
+     */
     event CredentialRevoked(uint256 indexed credentialId, uint256 revokedAt);
 
     // Structs
@@ -43,6 +58,10 @@ library LibCredentialRegistry {
         mapping(string => uint256[]) holderToVCs;    // Maps holder DIDs to credential IDs
     }
 
+    /**
+     * @notice Retrieves the credential storage data from a predefined storage slot.
+     * @return l The credential storage data.
+     */
     function credentialStorage()
         internal
         pure
@@ -54,7 +73,17 @@ library LibCredentialRegistry {
         }
     }
 
-    // Issue a credential
+    /**
+     * @notice Issues a new credential.
+     * @dev Validates DIDs, permissions, and data before issuance.
+     * @param _issuerDID The DID of the issuing entity.
+     * @param _subDID The sub-DID associated with the issuer.
+     * @param _holderDID The DID of the credential holder.
+     * @param _credentialType The type of credential being issued.
+     * @param _metadataURI URI pointing to credential metadata.
+     * @param _expiresAt Expiration timestamp of the credential.
+     * @return The unique ID of the issued credential.
+     */
     function issueCredential(
         string memory _issuerDID,
         string memory _subDID, // Sub-DID of the issuer
@@ -106,7 +135,13 @@ library LibCredentialRegistry {
         return credentialId;
     }
 
-    // Revoke a credential
+    /**
+     * @notice Revokes an existing credential.
+     * @dev Ensures that only authorized entities can revoke credentials.
+     * @param _credentialId The unique ID of the credential to revoke.
+     * @param _issuerDID The DID of the issuing entity.
+     * @param _subDID The sub-DID with revocation permission.
+     */
     function revokeCredential(
         uint256 _credentialId,
         string memory _issuerDID,
@@ -133,41 +168,41 @@ library LibCredentialRegistry {
         emit CredentialRevoked(_credentialId, block.timestamp);
     }
 
-    // Get details of a credential
-    function getCredential(uint256 _credentialId)
-        internal
-        view
-        returns (Credential memory)
-    {
+    /**
+     * @notice Retrieves details of a specific credential by its ID.
+     * @dev Throws if the credential does not exist.
+     * @param _credentialId The unique identifier of the credential.
+     * @return The credential details including metadata and status.
+     */
+    function getCredential(uint256 _credentialId) internal view returns (Credential memory) {
         CredentialStorageData storage cs = credentialStorage();
-
         require(cs.credentials[_credentialId].id == _credentialId, "Credential does not exist");
-
         return cs.credentials[_credentialId];
     }
 
-    // Check if a credential is valid
+    /**
+     * @notice Checks if a credential is currently valid.
+     * @dev A credential is considered valid if it exists, is not revoked, and has not expired.
+     * @param _credentialId The unique identifier of the credential.
+     * @return True if the credential is valid, false otherwise.
+     */
     function isCredentialValid(uint256 _credentialId) internal view returns (bool) {
         CredentialStorageData storage cs = credentialStorage();
-
         Credential memory credential = cs.credentials[_credentialId];
-        if (credential.revoked) {
-            return false;
-        }
-        if (credential.expiresAt > 0 && credential.expiresAt <= block.timestamp) {
+        if (credential.revoked || (credential.expiresAt > 0 && credential.expiresAt <= block.timestamp)) {
             return false;
         }
         return true;
     }
 
-    // Get all credentials for a holder (Need to manage growth of this array)
-    function getCredentialsForHolder(string memory _holderDID)
-        internal
-        view
-        returns (uint256[] memory)
-    {
+    /**
+     * @notice Retrieves all credential IDs associated with a specific holder.
+     * @dev Returns an array of credential IDs linked to the holder's DID.
+     * @param _holderDID The DID of the credential holder.
+     * @return An array of credential IDs associated with the holder.
+     */
+    function getCredentialsForHolder(string memory _holderDID) internal view returns (uint256[] memory) {
         CredentialStorageData storage cs = credentialStorage();
-
         return cs.holderToVCs[_holderDID];
     }
 

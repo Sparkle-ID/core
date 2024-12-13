@@ -45,6 +45,16 @@ library LibDIDRegistry {
         }
     }
 
+    /**
+     * @notice Creates a new DID entry with specified details.
+     * @dev This function initializes a new DID with metadata, role, and type.
+     * @param _did The unique DID string.
+     * @param _owner The address of the DID owner.
+     * @param _role The role associated with the DID.
+     * @param _metadataURI The metadata URI linked to the DID.
+     * @param _expiresAt The expiration timestamp of the DID.
+     * @param _didType The type of DID being created.
+     */
     function createDID(
         string memory _did,
         address _owner,
@@ -77,7 +87,12 @@ library LibDIDRegistry {
         emit DIDCreated(_did, _owner, _metadataURI, block.timestamp);
     }
 
-    // Update
+    /**
+     * @notice Updates the metadata URI of an existing DID.
+     * @dev This function updates metadata only if the DID exists and is not revoked.
+     * @param _did The unique DID string.
+     * @param _metadataURI The new metadata URI.
+     */
     function updateDID(string memory _did, string memory _metadataURI) internal {
         DIDRegistryStorageData storage ss = didRegistryStorage();
 
@@ -91,7 +106,11 @@ library LibDIDRegistry {
         emit DIDUpdated(_did, _metadataURI, block.timestamp);
     }
 
-    // Revoke
+    /**
+     * @notice Revokes a previously created DID.
+     * @dev This function marks a DID as revoked, making it inactive.
+     * @param _did The unique DID string to be revoked.
+     */
     function revokeDID(string memory _did) internal {
         DIDRegistryStorageData storage ss = didRegistryStorage();
 
@@ -103,7 +122,12 @@ library LibDIDRegistry {
         emit DIDRevoked(_did, block.timestamp);
     }
 
-    // Delegate control of a DID
+    /**
+     * @notice Delegates control of a DID to another address.
+     * @dev Only the DID owner can delegate control.
+     * @param _did The DID for which control is being delegated.
+     * @param _delegate The address receiving delegated control.
+     */
     function delegateControl(string memory _did, address _delegate) internal {
         DIDRegistryStorageData storage ss = didRegistryStorage();
 
@@ -115,7 +139,12 @@ library LibDIDRegistry {
         emit DIDDelegated(_did, _delegate, block.timestamp);
     }
 
-    // Transfer ownership of a DID
+    /**
+     * @notice Transfers ownership of a DID to a new address.
+     * @dev This function allows the current owner to transfer control to another address.
+     * @param _did The unique DID string.
+     * @param _newOwner The new owner's address.
+     */
     function transferOwnership(string memory _did, address _newOwner) internal {
         DIDRegistryStorageData storage ss = didRegistryStorage();
 
@@ -127,7 +156,12 @@ library LibDIDRegistry {
         emit DIDOwnershipTransferred(_did, _newOwner, block.timestamp);
     }
 
-    // Link one DID to another
+    /**
+     * @notice Links one DID to another.
+     * @dev Both DIDs must exist before establishing the link.
+     * @param _did The primary DID to link from.
+     * @param _linkedDID The secondary DID to link to the primary.
+     */
     function linkDID(string memory _did, string memory _linkedDID) internal {
         DIDRegistryStorageData storage ss = didRegistryStorage();
 
@@ -139,7 +173,12 @@ library LibDIDRegistry {
         emit DIDLinked(_did, _linkedDID, block.timestamp);
     }
 
-    // Check if a DID is valid
+    /**
+     * @notice Checks if a specified DID is currently valid.
+     * @dev A valid DID must exist, not be revoked, and must not be expired.
+     * @param _did The unique DID string to check.
+     * @return True if the DID is valid, otherwise false.
+     */
     function isDIDValid(string memory _did) internal view returns (bool) {
         DIDRegistryStorageData storage ss = didRegistryStorage();
 
@@ -153,7 +192,12 @@ library LibDIDRegistry {
         return true;
     }
 
-    // Get linked DIDs
+    /**
+     * @notice Retrieves all DIDs linked to a specified DID.
+     * @dev Returns an array of linked DIDs if they exist.
+     * @param _did The primary DID whose linked DIDs are requested.
+     * @return An array of linked DIDs.
+     */
     function getLinkedDIDs(string memory _did) internal view returns (string[] memory) {
         DIDRegistryStorageData storage ss = didRegistryStorage();
         return ss.linkedDIDs[_did];
