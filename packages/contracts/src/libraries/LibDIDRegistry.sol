@@ -88,6 +88,17 @@ library LibDIDRegistry {
     }
 
     /**
+     * @notice Retrieves the details of a specified DID.
+     * @dev This function returns the DID details if the DID exists.
+     * @param _did The unique DID string to retrieve.
+     * @return The DID details as a struct.
+     */
+    function getDID(string memory _did) internal view returns (string memory) {
+        DIDRegistryStorageData storage ss = didRegistryStorage();
+        return ss.dids[_did].metadataURI;
+    }
+
+    /**
      * @notice Updates the metadata URI of an existing DID.
      * @dev This function updates metadata only if the DID exists and is not revoked.
      * @param _did The unique DID string.

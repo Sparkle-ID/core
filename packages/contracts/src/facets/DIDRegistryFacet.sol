@@ -28,6 +28,16 @@ contract DIDRegistryFacet is Modifiers {
     }
 
     /**
+     * @notice Retrieves the details of a specified DID.
+     * @dev This function returns the DID details if the DID exists.
+     * @param _did The unique DID string to retrieve.
+     * @return The DID details as a struct.
+     */
+    function getDID(string memory _did) external view returns (string memory) {
+        return LibDIDRegistry.getDID(_did);
+    }
+
+    /**
      * @notice Updates metadata associated with an existing DID.
      * @dev Only the DID owner or an authorized entity can call this function.
      * @param _did The DID to update.

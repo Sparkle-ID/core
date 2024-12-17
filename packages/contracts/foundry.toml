@@ -5,4 +5,6 @@ libs = ["lib"]
 solc_version = '0.8.20'
 optimizer = true
 
-# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+[rpc_endpoints]
+hedera = "https://ancient-fluent-tree.hedera-testnet.quiknode.pro/352ada59732a45c5f508afe8fbed229040ccefbc"
+

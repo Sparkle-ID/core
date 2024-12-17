@@ -10,7 +10,8 @@
   "scripts": {
     "test:unit": "forge test",
     "test:coverage": "forge coverage",
-    "build": "forge build"
+    "build": "forge build",
+    "deploy:testnet": "migrations/testnet/deploy.sh"
   },
   "author": "sparkle ID",
   "license": "ISC"
